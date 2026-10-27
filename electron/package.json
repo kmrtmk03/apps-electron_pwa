@@ -1,5 +1,5 @@
 {
-  "name": "panasonic-electron-app",
+  "name": "electron-pwa-app",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.28.0",
@@ -20,8 +20,8 @@
     "pwa:cert": "node scripts/generate-pwa-certs.js"
   },
   "build": {
-    "appId": "com.panasonic.panasonic-electron-app",
-    "productName": "Panasonic App",
+    "appId": "com.example.electron-pwa-app",
+    "productName": "Electron PWA App",
     "files": [
       "dist/**/*",
       "dist-electron/**/*",
