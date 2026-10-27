@@ -1,32 +1,25 @@
-# React + TypeScript + Vite
+# pwa
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + TypeScript + Vite（vite-plugin-pwa）で作った PWA。
+入力したメッセージを Electron アプリの API（`POST /api/message`）へ送信する。
 
-Currently, two official plugins are available:
+セットアップ・起動手順・コマンド一覧は、リポジトリ直下の [README.md](../README.md) を参照。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ディレクトリ構成
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```text
+pwa/
+├── src/
+│   ├── App.tsx
+│   └── features/message/           メッセージ送信機能
+│       ├── MessageSendPanel/       入力欄・送信ボタンの UI と、送信状態を扱うフック
+│       ├── messageApi.utils.ts     /api/message を呼び出す処理
+│       └── messageApi.type.ts      API のリクエスト・エラー応答の型
+├── public/                         PWA アイコン
+└── vite.config.ts                  PWA 設定と、開発時に /api/message を Electron へ転送するプロキシ
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 補足
+
+- API は同一オリジンの相対パス（`/api/message`）で呼ぶ。本番は Electron が PWA を配信するため、開発時は Vite のプロキシ経由で Electron（`https://localhost:5180`）へ転送される
+- Lint は oxlint（設定: `.oxlintrc.json`）
