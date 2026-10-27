@@ -96,6 +96,27 @@ pwa/src/
 - electron の `features/` は **バレル export（`index.ts`）を使っている**。新規ディレクトリも同じ構成にし、import はバレル経由にする
 - git 管理外（`.gitignore`）: `node_modules` / `dist` / `dist-electron` / `dev-dist` / `pwa-dist` / `certs`。これらを編集・コミットしない
 
+### ファイルは役割ごとに分割する
+
+1 つのファイルに複数の役割を詰め込まず、**役割ごとにファイルを分ける**。新規作成時も、既存ファイルへの追記時も同様。
+
+| 役割 | 置き場所・ファイル名 | 例 |
+|---|---|---|
+| UI（表示のみ） | `<Name>.tsx`（1 ファイル 1 コンポーネント） | `MessageSendPanel.tsx` |
+| 状態・操作のロジック | `hooks/useXxx.ts` | `hooks/useMessageSend.ts` |
+| API 呼び出し・UI 非依存の処理 | `*.utils.ts` | `messageApi.utils.ts` |
+| 型 | `*.type.ts` | `messageApi.type.ts` |
+| 定数（IPC チャンネル名・ポート番号・API パスなど） | `*.constants.ts` | `messageIpcChannels.constants.ts` |
+| Express のルーター（HTTP の入出力） | `*Router.ts` | `messageApiRouter.ts` |
+| スタイル | コンポーネントと同じ名前の `.css` | `MessageSendPanel.css` |
+
+- 分割の目安: 1 ファイルが「表示」「状態管理」「通信」「型・定数」のうち **2 つ以上を担っていたら分ける**
+- 型・定数をコンポーネントやフックの中に直書きしない。専用ファイルへ出す（そのファイル内でしか使わない小さなものは同居させてよい）
+- `main.ts` / `preload.ts` / `pwaServer.ts` のようなエントリーポイントは、配線（登録・起動）に専念させる。処理が増えたら `messageApi/` のような機能ディレクトリへ切り出す
+- 分割した結果、同じディレクトリのファイルが増えたら `index.ts`（electron の `features/` ではバレル export）で公開範囲をまとめる
+- 分割は**依頼された変更に関係する範囲**で行う。無関係な既存ファイルまで一斉に分割しない
+- 複数ファイルに分けたことで、命名・責務の説明が必要になった場合は JSDoc に「このファイルが何を担うか」を書く
+
 ## このプロジェクト特有の注意点
 
 ### Electron ↔ レンダラー ↔ PWA の通り道
