@@ -1,0 +1,39 @@
+# OS
+.DS_Store
+
+# 依存パッケージ
+node_modules
+
+# ビルド成果物
+dist
+dist-ssr
+dist-electron
+dev-dist
+release
+
+# PWA の配信用ディレクトリ（pwa のビルド成果物を electron へコピーしたもの）
+pwa-dist
+
+# mkcert で発行した HTTPS 証明書（"pnpm run pwa:cert" で各自生成する）
+certs
+
+# ログ
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ローカル専用の設定
+*.local
+
+# エディタ
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

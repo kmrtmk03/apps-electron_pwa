@@ -1,0 +1,64 @@
+{
+  "name": "panasonic-electron-app",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "description": "React と Electron を使用したデスクトップアプリケーション",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k \"vite --port 5173 --strictPort\" \"tsc -p electron --watch\" \"pnpm run dev:electron\"",
+    "dev:electron": "wait-on tcp:5173 file:dist-electron/main.js && VITE_DEV_SERVER_URL=http://localhost:5173 env -u ELECTRON_RUN_AS_NODE electron .",
+    "start": "env -u ELECTRON_RUN_AS_NODE electron .",
+    "build": "pnpm run build:renderer && pnpm run build:electron",
+    "build:renderer": "vite build",
+    "build:electron": "tsc -p electron",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit && tsc -p electron --noEmit",
+    "package:mac": "pnpm run build && electron-builder --mac",
+    "package:win": "pnpm run build && electron-builder --win",
+    "package:all": "pnpm run build && electron-builder --mac --win",
+    "pwa:cert": "node scripts/generate-pwa-certs.js"
+  },
+  "build": {
+    "appId": "com.panasonic.panasonic-electron-app",
+    "productName": "Panasonic App",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "express": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@types/express": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "concurrently": "latest",
+    "electron": "latest",
+    "electron-builder": "^26.15.3",
+    "typescript": "latest",
+    "wait-on": "latest"
+  }
+}
